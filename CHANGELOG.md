@@ -2,9 +2,14 @@
 
 All notable changes to the **World Earthquakes** Domoticz plugin will be documented in this file.
 
+## [0.1.3] - 2026-10-28
+- stabilized Plugin
+### Added
+- variable Mail Subject as Input Param
+- variable request interval
+
 ## [0.1.2] - 2026-10-28
-### Fixed
-- added by default settings in the plugin
+- minor code errors I oversaw
 
 ## [0.1.1] - 2026-10-28
 ### Fixed

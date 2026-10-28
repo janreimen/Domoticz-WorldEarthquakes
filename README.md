@@ -17,7 +17,7 @@ A modular Python plugin for **Domoticz** that fetches worldwide seismic activity
 
 1. Extract this archive into your Domoticz `plugins` directory:
    ```bash
-   tar -xzf Domoticz-WorldEarthquakes-v0.1.1.tar.gz -C /srv/domoticz/plugins/
+   tar -xzf Domoticz-WorldEarthquakes-<latest release>.tar.gz -C /srv/domoticz/plugins/
    ```
 2. Restart Domoticz:
    ```bash
