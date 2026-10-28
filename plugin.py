@@ -159,7 +159,7 @@ class BasePlugin:
         min_mag = float(Parameters["MinMagnitude"])
         max_age_min = int(Parameters["MaxAgeMinutes"])
         max_radius_km = float(Parameters["Radius"])
-subject_prefix = Parameters.get("Mode1", "[Earthquake Alert]")
+        subject_prefix = Parameters.get("Mode1", "[Earthquake Alert]")
 
         features = data.get("features", [])
         alert_text = ""
