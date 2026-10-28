@@ -29,6 +29,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
     sys.path.insert(0, _HERE)
 import Domoticz  # noqa: E402  (provided by Domoticz)
+
 ALERT_LEVEL_GREY = 0
 ALERT_LEVEL_GREEN = 1
 ALERT_LEVEL_YELLOW = 2
@@ -105,16 +106,16 @@ class BasePlugin:
 
             if 1 not in Devices:
                 Domoticz.Device(
-                    Name="Earthquake Alert",
+                    Name="World Earthquake Alert",
                     Unit=1,
                     TypeName="Alert",
-                    Description="Earthquake Monitoring Device",
+                    Description="World Earthquake Monitoring Device",
+                    Used=1,
                 ).Create()
-                Domoticz.Log("Created Earthquake Alert Sensor device.")
+                Domoticz.Log("Created active World Earthquake Alert Sensor device.")
 
             Domoticz.Heartbeat(60)
             
-            # Initial poll on start
             self.fetch_earthquakes()
             self.last_poll_time = time.time()
         except Exception as e:
@@ -159,15 +160,21 @@ class BasePlugin:
         min_mag = float(Parameters["MinMagnitude"])
         max_age_min = int(Parameters["MaxAgeMinutes"])
         max_radius_km = float(Parameters["Radius"])
-        subject_prefix = Parameters.get("Mode1", "[Earthquake Alert]")
+        
+        raw_mode1 = Parameters.get("Mode1", "[World Earthquake]")
+        if raw_mode1 in ("Debug", "Normal"):
+            subject_prefix = "[World Earthquake]"
+        else:
+            subject_prefix = raw_mode1
 
         features = data.get("features", [])
         alert_text = ""
-        message = ""
+        notification_text = ""
         current_time = time.time()
         max_mag_seen = 0.0
         unnoticed_count = 0
         unnoticed_details = ""
+        unnoticed_details_clean = ""
         noticed_count = 0
         has_felt_events = False
 
@@ -211,6 +218,9 @@ class BasePlugin:
                     f"{timestamp} : Unnoticed Earthquake in {region} ({lat}/{lon} ="
                     f" {distance:.1f} km away) with magnitude: {magnitude}<br>"
                 )
+                unnoticed_details_clean += (
+                    f" - Unnoticed: {region} ({distance:.1f} km away) Mag: {magnitude}\n"
+                )
                 continue
 
             has_felt_events = True
@@ -231,18 +241,23 @@ class BasePlugin:
                 f'<a href="https://www.seismicportal.eu/eventdetails.html?unid={unid}" style="color: BLUE;">Seismic Portal</a></span>'
             )
 
+            event_clean = (
+                f"🎯 Distance: {distance:.1f} km\n"
+                f"Magnitude: {magnitude:.1f}\nDepth: {depth:.1f} km\nLocation: {region}\n"
+                f"UTC Time: {date_formatted}\n"
+                f"Google Maps: https://maps.google.com/?q={lat:.6f},{lon:.6f}\n"
+                f"Seismic Portal: https://www.seismicportal.eu/eventdetails.html?unid={unid}"
+            )
+
             alert_text += event_html + "<br>------<br>"
-            message += event_html + "<br>------<br>"
+            notification_text += event_clean + "\n------\n"
 
         if not has_felt_events:
             alert_text += f"Unnoticed Earthquakes: {unnoticed_count}<br>"
-            message += f"Unnoticed Earthquakes: {unnoticed_count}<br>"
+            notification_text += f"Unnoticed Earthquakes: {unnoticed_count}\n"
         elif unnoticed_count > 0:
             alert_text += f".. and {unnoticed_count} Unnoticed Earthquakes<br>"
-            message += (
-                f".. and {unnoticed_count} Unnoticed Earthquakes :<br>"
-                f" {unnoticed_details}"
-            )
+            notification_text += f".. and {unnoticed_count} Unnoticed Earthquakes\n{unnoticed_details_clean}"
 
         alert_level = get_alert_level(max_mag_seen)
 
@@ -253,12 +268,12 @@ class BasePlugin:
             Domoticz.Log("Updated Earthquake Alert Sensor.")
 
         mailto = Parameters["Email"]
-        if message != "" and mailto:
+        if notification_text != "" and mailto:
             if noticed_count > 0 or (
                 unnoticed_count > 0 and max_mag_seen >= 5.0
             ):
                 subject = f"{subject_prefix} (Mag {max_mag_seen})"
-                Domoticz.SendNotification(subject, message)
+                Domoticz.SendNotification(subject, notification_text)
                 Domoticz.Log(f"Sent earthquake notification alert with subject: '{subject}'")
 
 
