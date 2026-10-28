@@ -242,11 +242,13 @@ class BasePlugin:
             )
 
             event_clean = (
-                f"🎯 Distance: {distance:.1f} km\n"
-                f"Magnitude: {magnitude:.1f}\nDepth: {depth:.1f} km\nLocation: {region}\n"
-                f"UTC Time: {date_formatted}\n"
-                f"Google Maps: https://maps.google.com/?q={lat:.6f},{lon:.6f}\n"
-                f"Seismic Portal: https://www.seismicportal.eu/eventdetails.html?unid={unid}"
+                f"🎯 Distance: {distance:.1f} km<br>"
+                f"• Magnitude: {magnitude:.1f}<br>"
+                f"• Depth: {depth:.1f} km<br>"
+                f"• Location: {region}<br>"
+                f"• UTC Time: {date_formatted}<br>"
+                f"• Google Maps: https://maps.google.com/?q={lat:.6f},{lon:.6f}<br>"
+                f"• Seismic Portal: https://www.seismicportal.eu/eventdetails.html?unid={unid}<br>"
             )
 
             alert_text += event_html + "<br>------<br>"
@@ -257,7 +259,7 @@ class BasePlugin:
             notification_text += f"Unnoticed Earthquakes: {unnoticed_count}\n"
         elif unnoticed_count > 0:
             alert_text += f".. and {unnoticed_count} Unnoticed Earthquakes<br>"
-            notification_text += f".. and {unnoticed_count} Unnoticed Earthquakes\n{unnoticed_details_clean}"
+            notification_text += f".. and {unnoticed_count} Unnoticed Earthquakes:\n{unnoticed_details_clean}"
 
         alert_level = get_alert_level(max_mag_seen)
 
@@ -325,3 +327,4 @@ def onDisconnect(Connection):
 def onTimer():
     global _plugin
     _plugin.onTimer()
+
