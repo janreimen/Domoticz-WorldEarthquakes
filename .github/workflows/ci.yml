@@ -1,14 +1,17 @@
 name: CI
 
-# Optional: Workflow-level permissions
-# permissions:
-#   contents: read
+# 🚀 Define when the workflow should run
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     
-    # 🔒 Add explicit minimum permissions here to resolve the CodeQL warning
+    # 🔒 Explicit minimum permissions to resolve CodeQL warnings
     permissions:
       contents: read
 
