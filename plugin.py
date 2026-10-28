@@ -1,5 +1,5 @@
 """
-<plugin key="Domoticz-WorldEarthquakes" name="World Earthquakes" author="Jan Reimen" version="0.1.1">
+<plugin key="Domoticz-WorldEarthquakes" name="World Earthquakes" author="Jan Reimen" version="0.1.2">
     <description>
         <h2>Earthquake Alerting Tool</h2><br/>
         Fill in Latitude, Longitude, E-Mail to contact of Earthquakes, Min Magnitude to alert, Max Age of the Earthquake to consider, Radius to look in
@@ -7,10 +7,10 @@
     <params>
         <param field="Latitude" label="Latitude" width="100" required="true" default="49.711975"/>
         <param field="Longitude" label="Longitude" width="100" required="true" default="6.253245"/>
-        <param field="Email" label="Notification Email" width="200" required="false" default="jan.reimen@pt.lu"/>
+        <param field="Email" label="Notification Email" width="200" required="false" default="xxxxx@pt.lu"/>
         <param field="MinMagnitude" label="Min Magnitude" width="50" required="true" default="5"/>
         <param field="MaxAgeMinutes" label="Max Age (Minutes)" width="50" required="true" default="121"/>
-        <param field="Radius" label="Max Radius (km)" width="100" required="true" default="960000"/>
+        <param field="Radius" label="Max Radius (km)" width="100" required="true" default="500"/>
         <param field="Mode1" label="Debug" width="75">
             <options>
                 <option label="True" value="Debug"/>

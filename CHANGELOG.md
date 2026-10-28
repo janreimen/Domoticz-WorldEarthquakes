@@ -2,6 +2,10 @@
 
 All notable changes to the **World Earthquakes** Domoticz plugin will be documented in this file.
 
+## [0.1.2] - 2026-10-28
+### Fixed
+- added by default settings in the plugin
+
 ## [0.1.1] - 2026-10-28
 ### Fixed
 - Fixed string literal syntax error on line 96 in `modules/earthquake_processor.py`.
